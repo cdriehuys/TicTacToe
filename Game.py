@@ -79,6 +79,17 @@ class Board:
         """
         self.board[row][col] = piece
 
+
+class Game:
+
+    def __init__(self, player1, player2):
+        """
+        Initialize the game.
+        """
+        self.board = Board()
+        self.player1 = player1
+        self.player2 = player2
+
 board = Board()
 print(board)
 board.place_piece(1, 1, 'X')
