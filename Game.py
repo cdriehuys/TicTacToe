@@ -38,10 +38,6 @@ class Board:
     def print_square(self, num):
         """
         Returns the character at the given square. If the given square is empty, a space (" ") is returned.
-        :param row: The row of the square.
-        :type row: int
-        :param col: The column of the square.
-        :type col: int
         :return: The character in the specified square.
         :rtype: str
         """
@@ -82,8 +78,45 @@ class Board:
         """
         self.squares[num - 1] = piece
 
+    def squares_equal(self, square_nums):
+        """
+        Test if all the square numbers given have the same (not None) value.
+        :param square_nums: A list of square numbers to check.
+        :type square_nums: tuple
+        :return: If the squares all contain the same not None value.
+        :rtype: bool
+        """
+        if len(square_nums) < 1:
+            return True
+
+        token = self.get_square(square_nums[0])
+
+        if token == " ":
+            return False
+
+        for i in range(1, len(square_nums)):
+            if self.get_square(square_nums[i]) != token:
+                return False
+
+        return True
 
 class Game:
+
+    WINNING_COMBOS = (
+        # Horizontal wins
+        (1, 2, 3),
+        (4, 5, 6),
+        (7, 8, 9),
+
+        # Vertical wins
+        (1, 4, 7),
+        (2, 5, 8),
+        (3, 6, 9),
+
+        # Diagonal wins
+        (1, 5, 9),
+        (3, 5, 7)
+    )
 
     def __init__(self, player1, player2):
         """
@@ -93,9 +126,27 @@ class Game:
         self.player1 = player1
         self.player2 = player2
 
-board = Board()
-print(board)
+    def game_won(self):
+        """
+        Determine if the game has been won yet.
+        :return:
+        :rtype:
+        """
+        for combo in Game.WINNING_COMBOS:
+            if self.board.squares_equal(combo):
+                print("Combo matched:", combo)
+                return True
+
+        return False
+
+
+game = Game(None, None)
+board = game.board
 board.place_piece(5, 'X')
 print(board)
-board.get_square(5)
+print("Game won: %s\n" % game.game_won())
+board.place_piece(7, 'X')
+board.place_piece(3, 'X')
+print(board)
+print("Game won: %s\n" % game.game_won())
 
