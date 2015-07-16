@@ -8,17 +8,11 @@ class Board:
         """
 
         # create empty board
-        self.board = []
+        self.squares = []
 
         # initialize the board to be empty
-        for i in range(3):
-
-            row = []
-
-            for j in range(3):
-                row.append(None)
-
-            self.board.append(row)
+        for i in range(9):
+            self.squares.append(None)
 
     def __str__(self):
         """
@@ -28,20 +22,20 @@ class Board:
         """
         ret_str = ""
         ret_str += "   |   |   \n"
-        ret_str += " %s | %s | %s \n" % (self.print_square(0, 0), self.print_square(0, 1), self.print_square(0, 2))
+        ret_str += " %s | %s | %s \n" % (self.print_square(7), self.print_square(8), self.print_square(9))
         ret_str += "   |   |   \n"
         ret_str += "---+---+---\n"
         ret_str += "   |   |   \n"
-        ret_str += " %s | %s | %s \n" % (self.print_square(1, 0), self.print_square(1, 1), self.print_square(1, 2))
+        ret_str += " %s | %s | %s \n" % (self.print_square(4), self.print_square(5), self.print_square(6))
         ret_str += "   |   |   \n"
         ret_str += "---+---+---\n"
         ret_str += "   |   |   \n"
-        ret_str += " %s | %s | %s \n" % (self.print_square(2, 0), self.print_square(2, 1), self.print_square(2, 2))
+        ret_str += " %s | %s | %s \n" % (self.print_square(1), self.print_square(2), self.print_square(3))
         ret_str += "   |   |   \n\n"
 
         return ret_str
 
-    def print_square(self, row, col):
+    def print_square(self, num):
         """
         Returns the character at the given square. If the given square is empty, a space (" ") is returned.
         :param row: The row of the square.
@@ -51,33 +45,42 @@ class Board:
         :return: The character in the specified square.
         :rtype: str
         """
-        return str(self.get_square(row, col))
+        return str(self.get_square(num))
 
-    def get_square(self, row, col):
+    def get_square(self, num):
         """
-        Get the game piece at the specified location.
-        :param row: The row index of the square.
-        :type row: int
-        :param col: The column index of the square.
-        :type col: int
-        :return: The game piece in the square.
+        Get a square by number based on this chart:
+
+           |   |
+         7 | 8 | 9
+           |   |
+        ---+---+---
+           |   |
+         4 | 5 | 6
+           |   |
+        ---+---+---
+           |   |
+         1 | 2 | 3
+           |   |
+
+        :param num: The square number to get.
+        :type num: int
+        :return: The piece at the specified square.
         :rtype: str
         """
-        return self.board[row][col] if self.board[row][col] else " "
+        return self.squares[num - 1] if self.squares[num - 1] else " "
 
-    def place_piece(self, row, col, piece):
+    def place_piece(self, num, piece):
         """
         Places the given piece at the given location.
-        :param row: The row index to place the piece at.
-        :type row: int
-        :param col: The column index to place the piece at.
-        :type col: int
+        :param num: The square number to place the piece in.
+        :type num: int
         :param piece: The piece to place.
         :type piece: str
         :return:
         :rtype:
         """
-        self.board[row][col] = piece
+        self.squares[num - 1] = piece
 
 
 class Game:
@@ -92,5 +95,7 @@ class Game:
 
 board = Board()
 print(board)
-board.place_piece(1, 1, 'X')
+board.place_piece(5, 'X')
 print(board)
+board.get_square(5)
+
