@@ -106,3 +106,35 @@ class BoardTest(TestCase):
         board.place_piece(2, 'X')
         board.place_piece(3, 'X')
         self.assertEqual(True, board.squares_equal((1, 2, 3)))
+
+
+class GameTest(TestCase):
+    def test_game_won_with_no_win(self):
+        """
+        If the game has not been won by a player yet, the function should return false.
+        :return:
+        :rtype:
+        """
+        game = Game(None, None)
+        board = game.board
+        board.place_piece(7, 'O')
+        board.place_piece(5, 'X')
+        board.place_piece(3, 'O')
+        self.assertFalse(game.game_won())
+
+    def test_game_won_with_win(self):
+        """
+        If a player has 3 pieces in a line, the game should be won and the function should return true.
+        :return:
+        :rtype:
+        """
+        game = Game(None, None)
+        board = game.board
+        board.place_piece(7, 'O')
+        board.place_piece(5, 'X')
+        board.place_piece(3, 'O')
+        board.place_piece(8, 'X')
+        board.place_piece(1, 'O')
+        board.place_piece(4, 'X')
+        board.place_piece(2, 'O')
+        self.assertTrue(game.game_won())
