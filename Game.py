@@ -140,13 +140,14 @@ class Game:
         return False
 
 
-game = Game(None, None)
-board = game.board
-board.place_piece(5, 'X')
-print(board)
-print("Game won: %s\n" % game.game_won())
-board.place_piece(7, 'X')
-board.place_piece(3, 'X')
-print(board)
-print("Game won: %s\n" % game.game_won())
+if __name__ == "__main__":
+    game = Game(None, None)
+    board = game.board
+    board.place_piece(5, 'X')
+    print(board)
+    print("Game won: %s\n" % game.game_won())
+    board.place_piece(7, 'X')
+    board.place_piece(3, 'X')
+    print(board)
+    print("Game won: %s\n" % game.game_won())
 
