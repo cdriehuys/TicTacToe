@@ -84,7 +84,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        self.assertEqual(True, board.squares_equal(()))
+        self.assertTrue(board.squares_equal(()))
 
     def test_squares_equal_with_blank_squares(self):
         """
@@ -93,7 +93,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        self.assertEqual(False, board.squares_equal((1, 2, 3)))
+        self.assertFalse(board.squares_equal((1, 2, 3)))
 
     def test_squares_equal_with_same_squares(self):
         """
@@ -105,7 +105,7 @@ class BoardTest(TestCase):
         board.place_piece(1, 'X')
         board.place_piece(2, 'X')
         board.place_piece(3, 'X')
-        self.assertEqual(True, board.squares_equal((1, 2, 3)))
+        self.assertTrue(board.squares_equal((1, 2, 3)))
 
 
 class GameTest(TestCase):
