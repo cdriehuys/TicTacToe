@@ -154,6 +154,28 @@ class Game:
         return False
 
 
+class Player:
+    def __init__(self, piece):
+        """
+        Initialize the player with a piece.
+        :param piece: The player's game piece. Ex: 'X'
+        :type piece: str
+        :return:
+        :rtype:
+        """
+        self.piece = piece
+
+    def play(self, board):
+        """
+        Play a move on the given board.
+        :param board:
+        :type board:
+        :return:
+        :rtype:
+        """
+        pass
+
+
 if __name__ == "__main__":
     game = Game(None, None)
     board = game.board

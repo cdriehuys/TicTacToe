@@ -2,7 +2,7 @@ __author__ = 'Chathan'
 
 from unittest import TestCase
 
-from Game import Board, Game
+from Game import Board, Game, Player
 
 
 class BoardTest(TestCase):
@@ -166,3 +166,14 @@ class GameTest(TestCase):
         board.place_piece(4, 'X')
         board.place_piece(2, 'O')
         self.assertTrue(game.game_won())
+
+
+class PlayerTest(TestCase):
+    def test_init(self):
+        """
+        After initialization, the player's piece should be set to the one it was called with.
+        :return:
+        :rtype:
+        """
+        player = Player('X')
+        self.assertEqual('X', player.piece)
