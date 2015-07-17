@@ -162,7 +162,7 @@ class Game:
         :return:
         :rtype:
         """
-        while not self.game_won():
+        while not self.game_won() and self.board.get_possible_moves():
             self.player1.play(self.board)
             print(self.board)
             if not self.game_won():
@@ -204,8 +204,32 @@ class DumbAI(Player):
         moves = board.get_possible_moves()
         board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
 
+class HumanPlayer(Player):
+    def play(self, board):
+        """
+        Ask for a move from the player and try to make that move.
+        :param board:
+        :type board:
+        :return:
+        :rtype:
+        """
+        possible = board.get_possible_moves()
+        valid = False
+        while not valid:
+            move = input("Which square would you like to place your piece in?: ")
+            try:
+                move = int(move)
+                if move in possible:
+                    valid = True
+                else:
+                    print("That move has already been made, or is out of range.")
+            except ValueError:
+                print("Please enter a valid integer.")
+
+        board.place_piece(move, self.piece)
+
 
 if __name__ == "__main__":
-    game = Game(DumbAI('X'), DumbAI('O'))
+    game = Game(HumanPlayer('X'), DumbAI('O'))
     game.play()
 
