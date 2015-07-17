@@ -149,10 +149,11 @@ class Game:
     def __init__(self, player1, player2):
         """
         Initialize the game.
+        :param player1: The class of the first player.
         """
         self.board = Board()
-        self.player1 = player1
-        self.player2 = player2
+        self.player1 = player1(self, 'X')
+        self.player2 = player2(self, 'O')
 
     def game_won(self):
         """
@@ -173,25 +174,45 @@ class Game:
         :rtype:
         """
         while not self.game_won() and self.board.get_possible_moves():
-            self.player1.play(self.board)
+            self.player1.play()
             print(self.board)
             if not self.game_won():
-                self.player2.play(self.board)
+                self.player2.play()
                 print(self.board)
+
+    def make_move(self, player, position):
+        """
+        Makes a move in a safe manner by checking if the square that the move is made in already has a piece.
+        :param player: The player making the move.
+        :type player: Player
+        :param position: The square to make the move in.
+        :type position: int
+        :return:
+        :rtype:
+        """
+        if self.board.get_square == ' ':
+            raise RuntimeError("That square is already occupied.")
+
+        self.board.place_piece(position, player.piece)
 
 
 class Player:
-    def __init__(self, piece):
+    def __init__(self, game, piece):
         """
         Initialize the player with a piece.
+        :param game: The game the player belongs to.
+        :type game: Game
         :param piece: The player's game piece. Ex: 'X'
         :type piece: str
         :return:
         :rtype:
         """
+        self.game = game
         self.piece = piece
 
-    def play(self, board):
+        self.board = self.game.board
+
+    def play(self):
         """
         Play a move on the given board.
         :param board:
@@ -199,19 +220,19 @@ class Player:
         :return:
         :rtype:
         """
-        pass
+        self.board = self.game.board
 
 
 class HumanPlayer(Player):
-    def play(self, board):
+    def play(self):
         """
         Ask for a move from the player and try to make that move.
-        :param board:
-        :type board:
         :return:
         :rtype:
         """
-        possible = board.get_possible_moves()
+        super(HumanPlayer, self).play()
+
+        possible = self.board.get_possible_moves()
         valid = False
         while not valid:
             move = input("Which square would you like to place your piece in?: ")
@@ -224,20 +245,20 @@ class HumanPlayer(Player):
             except ValueError:
                 print("Please enter a valid integer.")
 
-        board.place_piece(move, self.piece)
+        self.game.make_move(self, move)
 
 
 class DumbAI(Player):
-    def play(self, board):
+    def play(self):
         """
         Play a random move.
-        :param board:
-        :type board:
         :return:
         :rtype:
         """
-        moves = board.get_possible_moves()
-        board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
+        super(DumbAI, self).play()
+
+        moves = self.board.get_possible_moves()
+        self.board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
 
 
 class DefinedMovesAI(Player):
@@ -248,18 +269,18 @@ class DefinedMovesAI(Player):
     # the best moves to make, in order of preference
     BEST_MOVES = (5, 1, 3, 9, 2, 4, 6, 8)
 
-    def play(self, board):
+    def play(self):
         """
         Selects the best available move.
-        :param board: The board to play on.
-        :type board: Board
         :return:
         :rtype:
         """
-        possible = board.get_possible_moves()
+        super(DefinedMovesAI, self).play()
+
+        possible = self.board.get_possible_moves()
         for move in DefinedMovesAI.BEST_MOVES:
             if move in possible:
-                board.place_piece(move, self.piece)
+                self.board.place_piece(move, self.piece)
                 break
 
 
@@ -269,44 +290,44 @@ class SmartDefinedMovesAI(DefinedMovesAI):
     that move. If it can't win, it looks to see if the player can win in their next turn, and if they can, it blocks
     that move. If neither of those conditions are true, it will pull the next move from the list of best moves.
     """
-    def play(self, board):
+    def play(self):
         """
         Tries to win, then tries to block the player, then selects the next best move.
-        :param board: The board to play on.
-        :type board: Board
         :return:
         :rtype:
         """
-        possible = board.get_possible_moves()
+        super(SmartDefinedMovesAI, self).play()
+
+        possible = self.board.get_possible_moves()
 
         for move in possible:
-            temp_board = board.copy()
+            temp_board = self.board.copy()
 
             temp_board.place_piece(move, self.piece)
 
             for combo in Game.WINNING_COMBOS:
                 if temp_board.squares_equal(combo):
-                    board.place_piece(move, self.piece)
+                    self.board.place_piece(move, self.piece)
                     return
 
         for move in possible:
-            temp_board = board.copy()
+            temp_board = self.board.copy()
 
             # TODO: Find better way to get the other piece to allow for arbitrary tokens, not just 'X' and 'O'
             temp_board.place_piece(move, 'O' if self.piece == 'X' else 'X')
 
             for combo in Game.WINNING_COMBOS:
                 if temp_board.squares_equal(combo):
-                    board.place_piece(move, self.piece)
+                    self.board.place_piece(move, self.piece)
                     return
 
         for move in DefinedMovesAI.BEST_MOVES:
             if move in possible:
-                board.place_piece(move, self.piece)
+                self.board.place_piece(move, self.piece)
                 return
 
 
 if __name__ == "__main__":
-    game = Game(HumanPlayer('X'), SmartDefinedMovesAI('O'))
+    game = Game(HumanPlayer, SmartDefinedMovesAI)
     game.play()
 
