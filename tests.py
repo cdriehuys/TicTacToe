@@ -107,6 +107,34 @@ class BoardTest(TestCase):
         board.place_piece(3, 'X')
         self.assertTrue(board.squares_equal((1, 2, 3)))
 
+    def test_possible_moves_with_empty_board(self):
+        """
+        Getting the possible moves from an empty board should return a list containing the numbers in the range [1, 9].
+        :return:
+        :rtype:
+        """
+        board = Board()
+        self.assertListEqual(
+            [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            board.get_possible_moves()
+        )
+
+    def test_possible_moves_with_some_pieces(self):
+        """
+        Getting the possible moves from a board should return the square numbers that have no piece in them.
+        :return:
+        :rtype:
+        """
+        board = Board()
+        board.place_piece(2, 'X')
+        board.place_piece(6, 'O')
+        board.place_piece(8, 'X')
+        board.place_piece(4, 'O')
+        self.assertListEqual(
+            [1, 3, 5, 7, 9],
+            board.get_possible_moves()
+        )
+
 
 class GameTest(TestCase):
     def test_game_won_with_no_win(self):

@@ -100,6 +100,21 @@ class Board:
 
         return True
 
+    def get_possible_moves(self):
+        """
+        Returns a list of possible move locations.
+        :return:
+        :rtype:
+        """
+        moves = []
+
+        for i in range(len(self.squares)):
+            if not self.squares[i]:
+                moves.append(i + 1)
+
+        return moves
+
+
 class Game:
 
     WINNING_COMBOS = (
