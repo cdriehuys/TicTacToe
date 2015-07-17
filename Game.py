@@ -5,6 +5,22 @@ import random
 
 class Board:
 
+    WINNING_COMBOS = (
+        # Horizontal wins
+        (1, 2, 3),
+        (4, 5, 6),
+        (7, 8, 9),
+
+        # Vertical wins
+        (1, 4, 7),
+        (2, 5, 8),
+        (3, 6, 9),
+
+        # Diagonal wins
+        (1, 5, 9),
+        (3, 5, 7)
+    )
+
     def __init__(self):
         """
         Initializes the Board class.
@@ -127,25 +143,20 @@ class Board:
         new_board.squares = self.squares.copy()
         return new_board
 
+    def game_won(self):
+        """
+        Determine if the game has been won yet.
+        :return:
+        :rtype:
+        """
+        for combo in Board.WINNING_COMBOS:
+            if self.squares_equal(combo):
+                return True
+
+        return False
+
 
 class Game:
-
-    WINNING_COMBOS = (
-        # Horizontal wins
-        (1, 2, 3),
-        (4, 5, 6),
-        (7, 8, 9),
-
-        # Vertical wins
-        (1, 4, 7),
-        (2, 5, 8),
-        (3, 6, 9),
-
-        # Diagonal wins
-        (1, 5, 9),
-        (3, 5, 7)
-    )
-
     def __init__(self, player1, player2):
         """
         Initialize the game.
@@ -155,28 +166,16 @@ class Game:
         self.player1 = player1(self, 'X')
         self.player2 = player2(self, 'O')
 
-    def game_won(self):
-        """
-        Determine if the game has been won yet.
-        :return:
-        :rtype:
-        """
-        for combo in Game.WINNING_COMBOS:
-            if self.board.squares_equal(combo):
-                return True
-
-        return False
-
     def play(self):
         """
         Plays the game.
         :return:
         :rtype:
         """
-        while not self.game_won() and self.board.get_possible_moves():
+        while not self.board.game_won() and self.board.get_possible_moves():
             self.player1.play()
             print(self.board)
-            if not self.game_won():
+            if not self.board.game_won():
                 self.player2.play()
                 print(self.board)
 
@@ -284,12 +283,15 @@ class DefinedMovesAI(Player):
                 break
 
 
-class SmartDefinedMovesAI(DefinedMovesAI):
+class SmartDefinedMovesAI(Player):
     """
     An improved version of the DefinedMovesAI that looks ahead one move. If it can win in the next move, it will take
     that move. If it can't win, it looks to see if the player can win in their next turn, and if they can, it blocks
     that move. If neither of those conditions are true, it will pull the next move from the list of best moves.
     """
+    # the best moves to make, in order of preference
+    BEST_MOVES = (5, 1, 3, 9, 2, 4, 6, 8)
+
     def play(self):
         """
         Tries to win, then tries to block the player, then selects the next best move.
@@ -305,10 +307,9 @@ class SmartDefinedMovesAI(DefinedMovesAI):
 
             temp_board.place_piece(move, self.piece)
 
-            for combo in Game.WINNING_COMBOS:
-                if temp_board.squares_equal(combo):
-                    self.board.place_piece(move, self.piece)
-                    return
+            if temp_board.game_won():
+                self.board.place_piece(move, self.piece)
+                return
 
         for move in possible:
             temp_board = self.board.copy()
@@ -316,18 +317,32 @@ class SmartDefinedMovesAI(DefinedMovesAI):
             # TODO: Find better way to get the other piece to allow for arbitrary tokens, not just 'X' and 'O'
             temp_board.place_piece(move, 'O' if self.piece == 'X' else 'X')
 
-            for combo in Game.WINNING_COMBOS:
-                if temp_board.squares_equal(combo):
-                    self.board.place_piece(move, self.piece)
-                    return
+            if temp_board.game_won():
+                self.board.place_piece(move, self.piece)
+                return
 
-        for move in DefinedMovesAI.BEST_MOVES:
+        for move in SmartDefinedMovesAI.BEST_MOVES:
             if move in possible:
                 self.board.place_piece(move, self.piece)
                 return
 
 
+def print_headline(text):
+    """
+    Prints text in a noticeable manner.
+    :param text: The text to print.
+    :type text: str
+    :return:
+    :rtype:
+    """
+    print('#' * 80)
+    print('# %s' % text, end='')
+    print(' ' * (80 - len(text) - 4), end='')
+    print(' #')
+    print('#' * 80)
+
+
 if __name__ == "__main__":
-    game = Game(HumanPlayer, SmartDefinedMovesAI)
-    game.play()
+    TicTacToe = Game(HumanPlayer, SmartDefinedMovesAI)
+    TicTacToe.play()
 
