@@ -1,5 +1,8 @@
 __author__ = 'Chathan Driehuys'
 
+import random
+
+
 class Board:
 
     def __init__(self):
@@ -153,6 +156,19 @@ class Game:
 
         return False
 
+    def play(self):
+        """
+        Plays the game.
+        :return:
+        :rtype:
+        """
+        while not self.game_won():
+            self.player1.play(self.board)
+            print(self.board)
+            if not self.game_won():
+                self.player2.play(self.board)
+                print(self.board)
+
 
 class Player:
     def __init__(self, piece):
@@ -176,14 +192,20 @@ class Player:
         pass
 
 
+class DumbAI(Player):
+    def play(self, board):
+        """
+        Play a random move.
+        :param board:
+        :type board:
+        :return:
+        :rtype:
+        """
+        moves = board.get_possible_moves()
+        board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
+
+
 if __name__ == "__main__":
-    game = Game(None, None)
-    board = game.board
-    board.place_piece(5, 'X')
-    print(board)
-    print("Game won: %s\n" % game.game_won())
-    board.place_piece(7, 'X')
-    board.place_piece(3, 'X')
-    print(board)
-    print("Game won: %s\n" % game.game_won())
+    game = Game(DumbAI('X'), DumbAI('O'))
+    game.play()
 
