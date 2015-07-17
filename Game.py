@@ -117,6 +117,16 @@ class Board:
 
         return moves
 
+    def copy(self):
+        """
+        Returns a new board that is a copy of this one.
+        :return: A copy of this board.
+        :rtype: Board
+        """
+        new_board = Board()
+        new_board.squares = self.squares.copy()
+        return new_board
+
 
 class Game:
 
@@ -252,7 +262,50 @@ class DefinedMovesAI(Player):
                 break
 
 
+class SmartDefinedMovesAI(DefinedMovesAI):
+    """
+    An improved version of the DefinedMovesAI that looks ahead one move. If it can win in the next move, it will take
+    that move. If it can't win, it looks to see if the player can win in their next turn, and if they can, it blocks
+    that move. If neither of those conditions are true, it will pull the next move from the list of best moves.
+    """
+    def play(self, board):
+        """
+        Tries to win, then tries to block the player, then selects the next best move.
+        :param board: The board to play on.
+        :type board: Board
+        :return:
+        :rtype:
+        """
+        possible = board.get_possible_moves()
+
+        for move in possible:
+            temp_board = board.copy()
+
+            temp_board.place_piece(move, self.piece)
+
+            for combo in Game.WINNING_COMBOS:
+                if temp_board.squares_equal(combo):
+                    board.place_piece(move, self.piece)
+                    return
+
+        for move in possible:
+            temp_board = board.copy()
+
+            # TODO: Find better way to get the other piece to allow for arbitrary tokens, not just 'X' and 'O'
+            temp_board.place_piece(move, 'O' if self.piece == 'X' else 'X')
+
+            for combo in Game.WINNING_COMBOS:
+                if temp_board.squares_equal(combo):
+                    board.place_piece(move, self.piece)
+                    return
+
+        for move in DefinedMovesAI.BEST_MOVES:
+            if move in possible:
+                board.place_piece(move, self.piece)
+                return
+
+
 if __name__ == "__main__":
-    game = Game(HumanPlayer('X'), DefinedMovesAI('O'))
+    game = Game(HumanPlayer('X'), SmartDefinedMovesAI('O'))
     game.play()
 
