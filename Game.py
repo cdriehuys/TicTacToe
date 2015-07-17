@@ -149,7 +149,6 @@ class Game:
         """
         for combo in Game.WINNING_COMBOS:
             if self.board.squares_equal(combo):
-                print("Combo matched:", combo)
                 return True
 
         return False
