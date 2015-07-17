@@ -229,7 +229,30 @@ class HumanPlayer(Player):
         board.place_piece(move, self.piece)
 
 
+class DefinedMovesAI(Player):
+    """
+    An AI that pays no attention to the player. It just selects the first available move from a list of best possible\
+    moves.
+    """
+    # the best moves to make, in order of preference
+    BEST_MOVES = (5, 1, 3, 9, 2, 4, 6, 8)
+
+    def play(self, board):
+        """
+        Selects the best available move.
+        :param board: The board to play on.
+        :type board: Board
+        :return:
+        :rtype:
+        """
+        possible = board.get_possible_moves()
+        for move in DefinedMovesAI.BEST_MOVES:
+            if move in possible:
+                board.place_piece(move, self.piece)
+                break
+
+
 if __name__ == "__main__":
-    game = Game(HumanPlayer('X'), DumbAI('O'))
+    game = Game(HumanPlayer('X'), DefinedMovesAI('O'))
     game.play()
 
