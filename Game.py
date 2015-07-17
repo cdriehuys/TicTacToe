@@ -202,18 +202,6 @@ class Player:
         pass
 
 
-class DumbAI(Player):
-    def play(self, board):
-        """
-        Play a random move.
-        :param board:
-        :type board:
-        :return:
-        :rtype:
-        """
-        moves = board.get_possible_moves()
-        board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
-
 class HumanPlayer(Player):
     def play(self, board):
         """
@@ -237,6 +225,19 @@ class HumanPlayer(Player):
                 print("Please enter a valid integer.")
 
         board.place_piece(move, self.piece)
+
+
+class DumbAI(Player):
+    def play(self, board):
+        """
+        Play a random move.
+        :param board:
+        :type board:
+        :return:
+        :rtype:
+        """
+        moves = board.get_possible_moves()
+        board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
 
 
 class DefinedMovesAI(Player):
