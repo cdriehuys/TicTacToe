@@ -85,15 +85,13 @@ class Board:
         """
         return self.squares[num - 1]
 
-    def place_piece(self, num, piece):
+    def set_square(self, num, piece):
         """
         Places the given piece at the given location.
         :param num: The square number to place the piece in.
         :type num: int
         :param piece: The piece to place.
         :type piece: str
-        :return:
-        :rtype:
         """
         self.squares[num - 1] = piece
 
@@ -192,7 +190,7 @@ class Game:
         if self.board.get_square(position):
             raise RuntimeError("That square is already occupied.")
 
-        self.board.place_piece(position, player.piece)
+        self.board.set_square(position, player.piece)
 
     def get_by_piece(self, piece):
         """
@@ -283,7 +281,7 @@ class DumbAI(Player):
         super(DumbAI, self).play()
 
         moves = self.board.get_possible_moves()
-        self.board.place_piece(moves[random.randint(0, len(moves) - 1)], self.piece)
+        self.board.set_square(moves[random.randint(0, len(moves) - 1)], self.piece)
 
 
 class DefinedMovesAI(Player):
@@ -305,7 +303,7 @@ class DefinedMovesAI(Player):
         possible = self.board.get_possible_moves()
         for move in DefinedMovesAI.BEST_MOVES:
             if move in possible:
-                self.board.place_piece(move, self.piece)
+                self.board.set_square(move, self.piece)
                 break
 
 
@@ -331,25 +329,25 @@ class SmartDefinedMovesAI(Player):
         for move in possible:
             temp_board = self.board.copy()
 
-            temp_board.place_piece(move, self.piece)
+            temp_board.set_square(move, self.piece)
 
             if temp_board.game_won():
-                self.board.place_piece(move, self.piece)
+                self.board.set_square(move, self.piece)
                 return
 
         for move in possible:
             temp_board = self.board.copy()
 
             # TODO: Find better way to get the other piece to allow for arbitrary tokens, not just 'X' and 'O'
-            temp_board.place_piece(move, 'O' if self.piece == 'X' else 'X')
+            temp_board.set_square(move, 'O' if self.piece == 'X' else 'X')
 
             if temp_board.game_won():
-                self.board.place_piece(move, self.piece)
+                self.board.set_square(move, self.piece)
                 return
 
         for move in SmartDefinedMovesAI.BEST_MOVES:
             if move in possible:
-                self.board.place_piece(move, self.piece)
+                self.board.set_square(move, self.piece)
                 return
 
 
@@ -390,7 +388,7 @@ class PerfectAI(Player):
             if is_players_turn:
                 for move in possible:
                     temp_board = board.copy()
-                    temp_board.place_piece(move, self.piece)
+                    temp_board.set_square(move, self.piece)
                     score, m = self.minimax(False, temp_board, level=(level + 1))
                     if score > best_score:
                         best_score = score - level
@@ -399,7 +397,7 @@ class PerfectAI(Player):
             else:
                 for move in possible:
                     temp_board = board.copy()
-                    temp_board.place_piece(move, 'O' if self.piece == 'X' else 'X')
+                    temp_board.set_square(move, 'O' if self.piece == 'X' else 'X')
                     score, m = self.minimax(True, temp_board, level=(level + 1))
                     if score < best_score:
                         best_score = score + level

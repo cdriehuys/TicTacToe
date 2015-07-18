@@ -24,7 +24,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(3, 'X')
+        board.set_square(3, 'X')
         self.assertEqual(board.squares[2], board.get_square(3))
 
     def test_get_emtpy_square(self):
@@ -44,7 +44,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(1, 'X')
+        board.set_square(1, 'X')
         self.assertEqual('X', board.get_square(1))
 
     def test_print_empty_square(self):
@@ -63,7 +63,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(1, 'X')
+        board.set_square(1, 'X')
         self.assertEqual('X', board.print_square(1))
 
     def test_place_piece(self):
@@ -74,7 +74,7 @@ class BoardTest(TestCase):
         """
         board = Board()
         self.assertEqual(None, board.get_square(5))
-        board.place_piece(5, 'X')
+        board.set_square(5, 'X')
         self.assertEqual('X', board.get_square(5))
 
     def test_squares_equal_with_blank_list(self):
@@ -102,9 +102,9 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(1, 'X')
-        board.place_piece(2, 'X')
-        board.place_piece(3, 'X')
+        board.set_square(1, 'X')
+        board.set_square(2, 'X')
+        board.set_square(3, 'X')
         self.assertTrue(board.squares_equal((1, 2, 3)))
 
     def test_possible_moves_with_empty_board(self):
@@ -126,10 +126,10 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(2, 'X')
-        board.place_piece(6, 'O')
-        board.place_piece(8, 'X')
-        board.place_piece(4, 'O')
+        board.set_square(2, 'X')
+        board.set_square(6, 'O')
+        board.set_square(8, 'X')
+        board.set_square(4, 'O')
         self.assertListEqual(
             [1, 3, 5, 7, 9],
             board.get_possible_moves()
@@ -142,9 +142,9 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(7, 'O')
-        board.place_piece(5, 'X')
-        board.place_piece(3, 'O')
+        board.set_square(7, 'O')
+        board.set_square(5, 'X')
+        board.set_square(3, 'O')
         self.assertFalse(board.game_won())
 
     def test_game_won_with_win(self):
@@ -154,13 +154,13 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(7, 'O')
-        board.place_piece(5, 'X')
-        board.place_piece(3, 'O')
-        board.place_piece(8, 'X')
-        board.place_piece(1, 'O')
-        board.place_piece(4, 'X')
-        board.place_piece(2, 'O')
+        board.set_square(7, 'O')
+        board.set_square(5, 'X')
+        board.set_square(3, 'O')
+        board.set_square(8, 'X')
+        board.set_square(1, 'O')
+        board.set_square(4, 'X')
+        board.set_square(2, 'O')
         self.assertTrue(board.game_won())
 
 
@@ -172,9 +172,9 @@ class GameTest(TestCase):
         :rtype:
         """
         board = Board()
-        board.place_piece(7, 'O')
-        board.place_piece(5, 'X')
-        board.place_piece(3, 'O')
+        board.set_square(7, 'O')
+        board.set_square(5, 'X')
+        board.set_square(3, 'O')
         self.assertFalse(board.game_won())
 
     def test_game_won_with_win(self):
@@ -185,13 +185,13 @@ class GameTest(TestCase):
         """
         game = Game(Player, Player)
         board = game.board
-        board.place_piece(7, 'O')
-        board.place_piece(5, 'X')
-        board.place_piece(3, 'O')
-        board.place_piece(8, 'X')
-        board.place_piece(1, 'O')
-        board.place_piece(4, 'X')
-        board.place_piece(2, 'O')
+        board.set_square(7, 'O')
+        board.set_square(5, 'X')
+        board.set_square(3, 'O')
+        board.set_square(8, 'X')
+        board.set_square(1, 'O')
+        board.set_square(4, 'X')
+        board.set_square(2, 'O')
         self.assertTrue(board.game_won())
 
 
