@@ -165,16 +165,21 @@ class Game:
         self.player1 = player1(self, 'X')
         self.player2 = player2(self, 'O')
 
+        self.player1_turn = True
+
     def play(self):
         """
         Plays the game.
         """
         while not self.board.game_won() and self.board.get_possible_moves():
-            self.player1.play()
-            print(self.board)
-            if not self.board.game_won() and self.board.get_possible_moves():
+
+            if self.player1_turn:
+                self.player1.play()
+            else:
                 self.player2.play()
-                print(self.board)
+
+            print(self.board)
+            self.player1_turn = not self.player1_turn
 
     def make_move(self, player, position):
         """
