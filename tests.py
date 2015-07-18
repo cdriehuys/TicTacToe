@@ -66,7 +66,7 @@ class BoardTest(TestCase):
         board.set_square(1, 'X')
         self.assertEqual('X', board.print_square(1))
 
-    def test_place_piece(self):
+    def test_set_square(self):
         """
         Placing a piece should set that square to the specified piece.
         :return:
@@ -93,6 +93,16 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
+        self.assertFalse(board.squares_equal((1, 2, 3)))
+
+    def test_squares_equal_with_different_squares(self):
+        """
+        If the squares aren't the same, the function should return false.
+        """
+        board = Board()
+        board.set_square(1, 'X')
+        board.set_square(2, 'O')
+        board.set_square(3, 'X')
         self.assertFalse(board.squares_equal((1, 2, 3)))
 
     def test_squares_equal_with_same_squares(self):
