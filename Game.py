@@ -230,8 +230,6 @@ class Player:
         :type game: Game
         :param piece: The player's game piece. Ex: 'X'
         :type piece: str
-        :return:
-        :rtype:
         """
         self.game = game
         self.piece = piece
@@ -241,8 +239,6 @@ class Player:
     def play(self):
         """
         Play a move on the given board.
-        :return:
-        :rtype:
         """
         self.board = self.game.board
 
@@ -251,8 +247,6 @@ class HumanPlayer(Player):
     def play(self):
         """
         Ask for a move from the player and try to make that move.
-        :return:
-        :rtype:
         """
         super(HumanPlayer, self).play()
 
@@ -278,8 +272,6 @@ class DumbAI(Player):
     def play(self):
         """
         Play a random move.
-        :return:
-        :rtype:
         """
         super(DumbAI, self).play()
 
@@ -298,8 +290,6 @@ class DefinedMovesAI(Player):
     def play(self):
         """
         Selects the best available move.
-        :return:
-        :rtype:
         """
         super(DefinedMovesAI, self).play()
 
@@ -322,8 +312,6 @@ class SmartDefinedMovesAI(Player):
     def play(self):
         """
         Tries to win, then tries to block the player, then selects the next best move.
-        :return:
-        :rtype:
         """
         super(SmartDefinedMovesAI, self).play()
 
@@ -423,8 +411,6 @@ def print_headline(text):
     Prints text in a noticeable manner.
     :param text: The text to print.
     :type text: str
-    :return:
-    :rtype:
     """
     print('#' * 80)
     print('# %s' % text, end='')
