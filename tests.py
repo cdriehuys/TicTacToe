@@ -2,7 +2,7 @@ __author__ = 'Chathan'
 
 from unittest import TestCase
 
-from Game import Board, Game, Player
+from Game import Board, Game, Player, HumanPlayer, DefinedMovesAI, SmartDefinedMovesAI, PerfectAI
 
 
 class BoardTest(TestCase):
@@ -203,7 +203,17 @@ class BoardTest(TestCase):
 
 
 class GameTest(TestCase):
-    pass
+    def test_game_init(self):
+        """
+        Make sure all the variables for the game class are set up correctly.
+        """
+        game = Game(Player, HumanPlayer)
+        p1 = game.player1
+        p2 = game.player2
+        self.assertIsInstance(game.player1, Player)
+        self.assertIsInstance(game.player2, HumanPlayer)
+        self.assertEqual(p1, game.player_piece_dict['X'])
+        self.assertEqual(p2, game.player_piece_dict['O'])
 
 
 class PlayerTest(TestCase):
