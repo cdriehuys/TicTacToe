@@ -183,11 +183,14 @@ class BoardTest(TestCase):
 
     def test_game_won_with_win(self):
         """
-        If a player has 3 pieces in a line, the game should be won and the function should return true.
+        If a player has 3 pieces in a line, the game should be won and the function should return true. The board's
+        winner_piece variable should also be set to the winner's piece.
         :return:
         :rtype:
         """
         board = Board()
+        # make sure board's winner_piece variable is initially None
+        self.assertIsNone(board.winner_piece)
         board.set_square(7, 'O')
         board.set_square(5, 'X')
         board.set_square(3, 'O')
@@ -196,6 +199,7 @@ class BoardTest(TestCase):
         board.set_square(4, 'X')
         board.set_square(2, 'O')
         self.assertTrue(board.game_won())
+        self.assertEqual('O', board.winner_piece)
 
 
 class GameTest(TestCase):
