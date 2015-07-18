@@ -175,7 +175,7 @@ class Game:
         while not self.board.game_won() and self.board.get_possible_moves():
             self.player1.play()
             print(self.board)
-            if not self.board.game_won():
+            if not self.board.game_won() and self.board.get_possible_moves():
                 self.player2.play()
                 print(self.board)
 
@@ -193,6 +193,32 @@ class Game:
             raise RuntimeError("That square is already occupied.")
 
         self.board.place_piece(position, player.piece)
+
+    def get_by_piece(self, piece):
+        """
+        Return a player based on their piece.
+        :return:
+        :rtype:
+        """
+        if piece == 'X':
+            return self.player1
+        elif piece == 'O':
+            return self.player2
+
+        return None
+
+    def get_winner(self):
+        """
+        Returns the winner of the game.
+        :return:
+        :rtype:
+        """
+        if self.board.game_won():
+            for combo in Board.WINNING_COMBOS:
+                if self.board.squares_equal(combo):
+                    return self.get_by_piece(self.board.squares[combo[0]])
+
+        return None
 
 
 class Player:
@@ -214,8 +240,6 @@ class Player:
     def play(self):
         """
         Play a move on the given board.
-        :param board:
-        :type board:
         :return:
         :rtype:
         """
@@ -230,6 +254,8 @@ class HumanPlayer(Player):
         :rtype:
         """
         super(HumanPlayer, self).play()
+
+        move = -1
 
         possible = self.board.get_possible_moves()
         valid = False
@@ -327,6 +353,70 @@ class SmartDefinedMovesAI(Player):
                 return
 
 
+class PerfectAI(Player):
+    """
+    This AI player utilizes a minimax search to find the optimal move.
+    """
+    def minimax(self, is_players_turn, board, level=0):
+        """
+        Finds the best move using a minimax algorithm
+        :param is_players_turn: If it is the player's turn, in which case we would try to maximize the score.
+        :type is_players_turn: bool
+        :param board: The board we're working with.
+        :type board: Board
+        """
+        best_score = -999 if is_players_turn else 999
+        best_move = -1
+
+        possible = board.get_possible_moves()
+
+        if board.game_won():
+
+            winner_piece = ''
+
+            for combo in Board.WINNING_COMBOS:
+                if board.squares_equal(combo):
+                    winner_piece = board.get_square(combo[0])
+
+            if winner_piece == self.piece:
+                best_score = 100
+            elif winner_piece != ' ':
+                best_score = -100
+
+        elif not possible:
+            best_score = 0
+
+        else:
+            if is_players_turn:
+                for move in possible:
+                    temp_board = board.copy()
+                    temp_board.place_piece(move, self.piece)
+                    score, m = self.minimax(False, temp_board, level=(level + 1))
+                    if score > best_score:
+                        best_score = score - level
+                        best_move = move
+
+            else:
+                for move in possible:
+                    temp_board = board.copy()
+                    temp_board.place_piece(move, 'O' if self.piece == 'X' else 'X')
+                    score, m = self.minimax(True, temp_board, level=(level + 1))
+                    if score < best_score:
+                        best_score = score + level
+                        best_move = move
+
+        return best_score, best_move
+
+    def play(self):
+        """
+        Plays a move.
+        """
+        super(PerfectAI, self).play()
+
+        score, move = self.minimax(True, self.board)
+        self.game.make_move(self, move)
+
+
 def print_headline(text):
     """
     Prints text in a noticeable manner.
@@ -343,6 +433,5 @@ def print_headline(text):
 
 
 if __name__ == "__main__":
-    TicTacToe = Game(HumanPlayer, SmartDefinedMovesAI)
-    TicTacToe.play()
-
+    tic_tac_toe = Game(HumanPlayer, PerfectAI)
+    tic_tac_toe.play()
