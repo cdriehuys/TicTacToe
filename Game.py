@@ -33,6 +33,8 @@ class Board:
         for i in range(9):
             self.squares.append(None)
 
+        self.winner_piece = None
+
     def __str__(self):
         """
         Create a string representation of the board.
@@ -149,6 +151,7 @@ class Board:
         """
         for combo in Board.WINNING_COMBOS:
             if self.squares_equal(combo):
+                self.winner_piece = self.get_square(combo[0])
                 return True
 
         return False
@@ -162,8 +165,14 @@ class Game:
         :param player2: The class of the second player.
         """
         self.board = Board()
+
         self.player1 = player1(self, 'X')
         self.player2 = player2(self, 'O')
+
+        self.player_piece_dict = {
+            'X': self.player1,
+            'O': self.player2,
+        }
 
         self.player1_turn = True
 
@@ -199,28 +208,18 @@ class Game:
     def get_by_piece(self, piece):
         """
         Return a player based on their piece.
-        :return:
-        :rtype:
+        :return: The player with the given piece.
+        :rtype: Player
         """
-        if piece == 'X':
-            return self.player1
-        elif piece == 'O':
-            return self.player2
-
-        return None
+        return self.player_piece_dict.get(piece, None)
 
     def get_winner(self):
         """
         Returns the winner of the game.
-        :return:
-        :rtype:
+        :return: The winner of the game.
+        :rtype: Player
         """
-        if self.board.game_won():
-            for combo in Board.WINNING_COMBOS:
-                if self.board.squares_equal(combo):
-                    return self.get_by_piece(self.board.squares[combo[0]])
-
-        return None
+        return self.get_by_piece(self.board.winner_piece)
 
 
 class Player:
