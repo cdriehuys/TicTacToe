@@ -145,6 +145,30 @@ class BoardTest(TestCase):
             board.get_possible_moves()
         )
 
+    def test_copy_with_blank_board(self):
+        """
+        Copying a blank board should create a new blank board. Modifying the squares on one should not change the
+        squares on the other.
+        """
+        board = Board()
+        new_board = board.copy()
+        self.assertListEqual([None] * 9, new_board.squares)
+        new_board.set_square(1, 'X')
+        self.assertIsNone(board.get_square(1))
+        self.assertEqual(new_board.get_square(1), 'X')
+
+    def test_copy_with_filled_board(self):
+        """
+        Copying a board that has pieces in it should return an exact copy with all the same pieces.
+        """
+        board = Board()
+        board.set_square(1, 'X')
+        board.set_square(3, 'O')
+        board.set_square(6, 'O')
+        board.set_square(7, 'X')
+        new_board = board.copy()
+        self.assertListEqual(['X', None, 'O', None, None, 'O', 'X', None, None], new_board.squares)
+
     def test_game_won_with_no_win(self):
         """
         If the game has not been won by a player yet, the function should return false.
