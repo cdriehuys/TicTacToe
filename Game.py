@@ -100,7 +100,7 @@ class Board:
         Test if all the square numbers given have the same (not None) value.
         :param square_nums: A list of square numbers to check.
         :type square_nums: tuple
-        :return: If the squares all contain the same not None value.
+        :return: True if the squares all contain the same not None value, False otherwise.
         :rtype: bool
         """
         if len(square_nums) < 1:
