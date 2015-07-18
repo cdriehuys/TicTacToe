@@ -13,7 +13,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        test_list = [None for i in range(9)]
+        test_list = [None] * 9
         self.assertEqual(test_list, board.squares)
 
     def test_get_index_values(self):
