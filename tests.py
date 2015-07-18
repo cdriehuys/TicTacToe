@@ -29,12 +29,12 @@ class BoardTest(TestCase):
 
     def test_get_emtpy_square(self):
         """
-        Trying to get an empty square should return ' '.
+        Trying to get an empty square should return None.
         :return:
         :rtype:
         """
         board = Board()
-        self.assertEqual(' ', board.get_square(1))
+        self.assertEqual(None, board.get_square(1))
 
     def test_get_filled_square(self):
         """
@@ -73,7 +73,7 @@ class BoardTest(TestCase):
         :rtype:
         """
         board = Board()
-        self.assertEqual(' ', board.get_square(5))
+        self.assertEqual(None, board.get_square(5))
         board.place_piece(5, 'X')
         self.assertEqual('X', board.get_square(5))
 

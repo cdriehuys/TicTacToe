@@ -60,7 +60,7 @@ class Board:
         :return: The character in the specified square.
         :rtype: str
         """
-        return str(self.get_square(num))
+        return str(self.get_square(num)) if self.get_square(num) else ' '
 
     def get_square(self, num):
         """
@@ -83,7 +83,7 @@ class Board:
         :return: The piece at the specified square.
         :rtype: str
         """
-        return self.squares[num - 1] if self.squares[num - 1] else " "
+        return self.squares[num - 1]
 
     def place_piece(self, num, piece):
         """
@@ -110,7 +110,7 @@ class Board:
 
         token = self.get_square(square_nums[0])
 
-        if token == " ":
+        if not token:
             return False
 
         for i in range(1, len(square_nums)):
@@ -189,7 +189,7 @@ class Game:
         :return:
         :rtype:
         """
-        if self.board.get_square == ' ':
+        if self.board.get_square(position):
             raise RuntimeError("That square is already occupied.")
 
         self.board.place_piece(position, player.piece)
@@ -380,7 +380,7 @@ class PerfectAI(Player):
 
             if winner_piece == self.piece:
                 best_score = 100
-            elif winner_piece != ' ':
+            elif winner_piece:
                 best_score = -100
 
         elif not possible:
