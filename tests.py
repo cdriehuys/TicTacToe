@@ -135,6 +135,34 @@ class BoardTest(TestCase):
             board.get_possible_moves()
         )
 
+    def test_game_won_with_no_win(self):
+        """
+        If the game has not been won by a player yet, the function should return false.
+        :return:
+        :rtype:
+        """
+        board = Board()
+        board.place_piece(7, 'O')
+        board.place_piece(5, 'X')
+        board.place_piece(3, 'O')
+        self.assertFalse(board.game_won())
+
+    def test_game_won_with_win(self):
+        """
+        If a player has 3 pieces in a line, the game should be won and the function should return true.
+        :return:
+        :rtype:
+        """
+        board = Board()
+        board.place_piece(7, 'O')
+        board.place_piece(5, 'X')
+        board.place_piece(3, 'O')
+        board.place_piece(8, 'X')
+        board.place_piece(1, 'O')
+        board.place_piece(4, 'X')
+        board.place_piece(2, 'O')
+        self.assertTrue(board.game_won())
+
 
 class GameTest(TestCase):
     def test_game_won_with_no_win(self):
@@ -143,12 +171,11 @@ class GameTest(TestCase):
         :return:
         :rtype:
         """
-        game = Game(None, None)
-        board = game.board
+        board = Board()
         board.place_piece(7, 'O')
         board.place_piece(5, 'X')
         board.place_piece(3, 'O')
-        self.assertFalse(game.game_won())
+        self.assertFalse(board.game_won())
 
     def test_game_won_with_win(self):
         """
@@ -156,7 +183,7 @@ class GameTest(TestCase):
         :return:
         :rtype:
         """
-        game = Game(None, None)
+        game = Game(Player, Player)
         board = game.board
         board.place_piece(7, 'O')
         board.place_piece(5, 'X')
@@ -165,7 +192,7 @@ class GameTest(TestCase):
         board.place_piece(1, 'O')
         board.place_piece(4, 'X')
         board.place_piece(2, 'O')
-        self.assertTrue(game.game_won())
+        self.assertTrue(board.game_won())
 
 
 class PlayerTest(TestCase):
@@ -175,5 +202,6 @@ class PlayerTest(TestCase):
         :return:
         :rtype:
         """
-        player = Player('X')
+        game = Game(Player, Player)
+        player = game.player1
         self.assertEqual('X', player.piece)
