@@ -361,15 +361,9 @@ class PerfectAI(Player):
 
         if board.game_won():
 
-            winner_piece = ''
-
-            for combo in Board.WINNING_COMBOS:
-                if board.squares_equal(combo):
-                    winner_piece = board.get_square(combo[0])
-
-            if winner_piece == self.piece:
+            if board.winner_piece == self.piece:
                 best_score = 100
-            elif winner_piece:
+            elif board.winner_piece:
                 best_score = -100
 
         elif not possible:
