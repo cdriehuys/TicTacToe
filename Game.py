@@ -120,8 +120,8 @@ class Board:
     def get_possible_moves(self):
         """
         Returns a list of possible move locations.
-        :return:
-        :rtype:
+        :return: A list of possible squares to make a move in.
+        :rtype: list
         """
         moves = []
 
@@ -159,6 +159,7 @@ class Game:
         """
         Initialize the game.
         :param player1: The class of the first player.
+        :param player2: The class of the second player.
         """
         self.board = Board()
         self.player1 = player1(self, 'X')
@@ -167,8 +168,6 @@ class Game:
     def play(self):
         """
         Plays the game.
-        :return:
-        :rtype:
         """
         while not self.board.game_won() and self.board.get_possible_moves():
             self.player1.play()
