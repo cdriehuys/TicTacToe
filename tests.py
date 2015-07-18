@@ -199,34 +199,7 @@ class BoardTest(TestCase):
 
 
 class GameTest(TestCase):
-    def test_game_won_with_no_win(self):
-        """
-        If the game has not been won by a player yet, the function should return false.
-        :return:
-        :rtype:
-        """
-        board = Board()
-        board.set_square(7, 'O')
-        board.set_square(5, 'X')
-        board.set_square(3, 'O')
-        self.assertFalse(board.game_won())
-
-    def test_game_won_with_win(self):
-        """
-        If a player has 3 pieces in a line, the game should be won and the function should return true.
-        :return:
-        :rtype:
-        """
-        game = Game(Player, Player)
-        board = game.board
-        board.set_square(7, 'O')
-        board.set_square(5, 'X')
-        board.set_square(3, 'O')
-        board.set_square(8, 'X')
-        board.set_square(1, 'O')
-        board.set_square(4, 'X')
-        board.set_square(2, 'O')
-        self.assertTrue(board.game_won())
+    pass
 
 
 class PlayerTest(TestCase):
