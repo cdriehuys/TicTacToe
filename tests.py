@@ -215,6 +215,23 @@ class GameTest(TestCase):
         self.assertEqual(p1, game.player_piece_dict['X'])
         self.assertEqual(p2, game.player_piece_dict['O'])
 
+    def test_make_move_in_occupied_square(self):
+        """
+        Trying to place a piece in an occupied square should throw a runtime exception.
+        """
+        game = Game(Player, Player)
+        game.make_move(game.player1, 5)
+        self.assertRaises(RuntimeError, game.make_move, game.player1, 5)
+
+    def test_make_move_in_empty_square(self):
+        """
+        Making a move should set that square in the board to the specified player's piece.
+        """
+        game = Game(Player, Player)
+        self.assertEqual(None, game.board.get_square(5))
+        game.make_move(game.player1, 5)
+        self.assertEqual(game.player1.piece, game.board.get_square(5))
+
 
 class PlayerTest(TestCase):
     def test_init(self):
