@@ -232,6 +232,17 @@ class GameTest(TestCase):
         game.make_move(game.player1, 5)
         self.assertEqual(game.player1.piece, game.board.get_square(5))
 
+    def test_get_by_piece(self):
+        """
+        Calling this function with a player's piece should return the player object with that piece. The first player's
+        piece should be an 'X' and the second player's piece should be an 'O'.
+        """
+        game = Game(Player, Player)
+        p1 = game.player1
+        p2 = game.player2
+        self.assertEqual(p1, game.get_by_piece('X'))
+        self.assertEqual(p2, game.get_by_piece('O'))
+
 
 class PlayerTest(TestCase):
     def test_init(self):
