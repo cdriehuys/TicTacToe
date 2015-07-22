@@ -248,8 +248,6 @@ class PlayerTest(TestCase):
     def test_init(self):
         """
         After initialization, the player's piece should be set to the one it was called with.
-        :return:
-        :rtype:
         """
         game = Game(Player, Player)
         player = game.player1
