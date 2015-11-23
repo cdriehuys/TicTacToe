@@ -1,5 +1,6 @@
 __author__ = 'Chathan'
 
+import unittest
 from unittest import TestCase
 
 from Game import Board, Game, Player, HumanPlayer, DefinedMovesAI, SmartDefinedMovesAI, PerfectAI
@@ -252,3 +253,7 @@ class PlayerTest(TestCase):
         game = Game(Player, Player)
         player = game.player1
         self.assertEqual('X', player.piece)
+
+
+if __name__ == '__main__':
+    unittest.main()
