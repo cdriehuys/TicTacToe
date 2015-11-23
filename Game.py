@@ -38,8 +38,6 @@ class Board:
     def __str__(self):
         """
         Create a string representation of the board.
-        :return: A string representation of the board.
-        :rtype: str
         """
         ret_str = ""
         ret_str += "   |   |   \n"
@@ -59,8 +57,6 @@ class Board:
     def print_square(self, num):
         """
         Returns the character at the given square. If the given square is empty, a space (" ") is returned.
-        :return: The character in the specified square.
-        :rtype: str
         """
         return str(self.get_square(num)) if self.get_square(num) else ' '
 
@@ -79,31 +75,18 @@ class Board:
            |   |
          1 | 2 | 3
            |   |
-
-        :param num: The square number to get.
-        :type num: int
-        :return: The piece at the specified square.
-        :rtype: str
         """
         return self.squares[num - 1]
 
     def set_square(self, num, piece):
         """
         Places the given piece at the given location.
-        :param num: The square number to place the piece in.
-        :type num: int
-        :param piece: The piece to place.
-        :type piece: str
         """
         self.squares[num - 1] = piece
 
     def squares_equal(self, square_nums):
         """
         Test if all the square numbers given have the same (not None) value.
-        :param square_nums: A list of square numbers to check.
-        :type square_nums: tuple
-        :return: True if the squares all contain the same not None value, False otherwise.
-        :rtype: bool
         """
         if len(square_nums) < 1:
             return True
@@ -122,8 +105,6 @@ class Board:
     def get_possible_moves(self):
         """
         Returns a list of possible move locations.
-        :return: A list of possible squares to make a move in.
-        :rtype: list
         """
         moves = []
 
@@ -136,8 +117,6 @@ class Board:
     def copy(self):
         """
         Returns a new board that is a copy of this one.
-        :return: A copy of this board.
-        :rtype: Board
         """
         new_board = Board()
         new_board.squares = self.squares.copy()
@@ -146,8 +125,6 @@ class Board:
     def game_won(self):
         """
         Determine if the game has been won yet.
-        :return:
-        :rtype:
         """
         for combo in Board.WINNING_COMBOS:
             if self.squares_equal(combo):
@@ -161,8 +138,6 @@ class Game:
     def __init__(self, player1, player2):
         """
         Initialize the game.
-        :param player1: The class of the first player.
-        :param player2: The class of the second player.
         """
         self.board = Board()
 
@@ -193,12 +168,6 @@ class Game:
     def make_move(self, player, position):
         """
         Makes a move in a safe manner by checking if the square that the move is made in already has a piece.
-        :param player: The player making the move.
-        :type player: Player
-        :param position: The square to make the move in.
-        :type position: int
-        :return:
-        :rtype:
         """
         if self.board.get_square(position):
             raise RuntimeError("That square is already occupied.")
@@ -208,16 +177,12 @@ class Game:
     def get_by_piece(self, piece):
         """
         Return a player based on their piece.
-        :return: The player with the given piece.
-        :rtype: Player
         """
         return self.player_piece_dict.get(piece, None)
 
     def get_winner(self):
         """
         Returns the winner of the game.
-        :return: The winner of the game.
-        :rtype: Player
         """
         return self.get_by_piece(self.board.winner_piece)
 
@@ -226,10 +191,6 @@ class Player:
     def __init__(self, game, piece):
         """
         Initialize the player with a piece.
-        :param game: The game the player belongs to.
-        :type game: Game
-        :param piece: The player's game piece. Ex: 'X'
-        :type piece: str
         """
         self.game = game
         self.piece = piece
@@ -349,10 +310,6 @@ class PerfectAI(Player):
     def minimax(self, is_players_turn, board, level=0):
         """
         Finds the best move using a minimax algorithm
-        :param is_players_turn: If it is the player's turn, in which case we would try to maximize the score.
-        :type is_players_turn: bool
-        :param board: The board we're working with.
-        :type board: Board
         """
         best_score = -999 if is_players_turn else 999
         best_move = -1
@@ -403,8 +360,6 @@ class PerfectAI(Player):
 def print_headline(text):
     """
     Prints text in a noticeable manner.
-    :param text: The text to print.
-    :type text: str
     """
     print('#' * 80)
     print('# %s' % text, end='')
